@@ -1,7 +1,7 @@
 
 
 class Oystercard
-  attr_reader :balance, :limit, :in_use
+  attr_reader :balance, :limit, :in_use, :entry_station
   LIMIT = 90
   Min_Balance = 1
   Min_Fare = 1
@@ -10,7 +10,9 @@ class Oystercard
     @balance = 0
     @limit = LIMIT
     @in_use = false
+    @entry_station = nil
   end
+
   def top_up(value)
     projection = @balance + value
     raise "top up limit of #{LIMIT} exceeded" if projection > @limit
@@ -27,17 +29,22 @@ class Oystercard
 
   #is it necessary to use both in_journey and in_use (they are both booleans showing the same thing)
   def in_journey?
-    @in_use
+    return true if @entry_station
+    false
   end
 
-  def tap_in
+  def tap_in(station = 'Unknown entry station')
     fail "Mininum balance of #{Min_Balance} required to travel" if @balance < Min_Balance
-    @in_use = true
+    @entry_station = station
+    in_journey?
   end
 
-  def tap_out
-    @in_use = false
+  def tap_out(station = 'Unknown exit station')
     deduct(Min_Fare)
+    @entry_station = nil
+    in_journey?
   end
 
-end
+
+
+  end

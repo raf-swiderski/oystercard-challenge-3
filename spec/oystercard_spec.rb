@@ -27,6 +27,13 @@ describe Oystercard do
     it 'should return false if the oystercard isnt in use' do
       expect(subject.in_journey?).to eq false
     end
+
+    it'should infer its status based on whether or not there is an entry station' do
+      @oystercard = Oystercard.new
+      @oystercard.top_up(10)
+      @oystercard.tap_in
+      expect(@oystercard.in_journey?).to eq true
+    end
   #  it 'should return true if the oystercard is in use' do
   #    expect(subject.in_journey?).to eq true
   #  end
@@ -45,6 +52,13 @@ describe Oystercard do
     it 'should fail if balance is less than 1' do
       expect{ subject.tap_in }.to raise_error "Mininum balance of #{Oystercard::Min_Balance} required to travel"
     end
+    it 'stores given station in @entry_station' do
+      @oystercard = Oystercard.new
+      @oystercard.top_up(20)
+      @oystercard.tap_in('Victoria')
+      expect(@oystercard.entry_station).to eq 'Victoria'
+    end
+
 
   end
 
