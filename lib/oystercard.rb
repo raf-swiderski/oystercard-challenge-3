@@ -1,4 +1,4 @@
-
+require_relative 'journey'
 
 class Oystercard
   attr_reader :balance, :limit, :in_use, :entry_station, :journeys
@@ -44,18 +44,9 @@ class Oystercard
 
   def tap_out(station = 'Unknown exit station')
     deduct(Min_Fare)
-
     in_journey?
     @journeys << { entry_station: @entry_station, exit_station: station }
     @entry_station = nil
   end
-
-
-
-
-
-
-
-
 
   end
