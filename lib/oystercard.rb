@@ -1,7 +1,7 @@
 
 
 class Oystercard
-  attr_reader :balance, :limit, :in_use, :entry_station
+  attr_reader :balance, :limit, :in_use, :entry_station, :journeys
   LIMIT = 90
   Min_Balance = 1
   Min_Fare = 1
@@ -11,6 +11,7 @@ class Oystercard
     @limit = LIMIT
     @in_use = false
     @entry_station = nil
+    @journeys = []
   end
 
   def top_up(value)
@@ -27,7 +28,9 @@ class Oystercard
 
   public
 
-  #is it necessary to use both in_journey and in_use (they are both booleans showing the same thing)
+  #is it necessary to use both in_journey and in_use
+  #(they are both booleans showing the same thing)
+
   def in_journey?
     return true if @entry_station
     false
@@ -41,9 +44,17 @@ class Oystercard
 
   def tap_out(station = 'Unknown exit station')
     deduct(Min_Fare)
-    @entry_station = nil
+
     in_journey?
+    @journeys << { entry_station: @entry_station, exit_station: station }
+    @entry_station = nil
   end
+
+
+
+
+
+
 
 
 
